@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HackVerse — Innovate. Build. Transform.</title>
+  <meta name="description" content="HackVerse is an elite web development challenge organized by Takshashila University × FACEPrep Campus. Build. Compete. Win." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ════════════════ TOKENS ════════════════ */
+    :root {
+      --black:  #000;
+      --bg:     #04060f;
+      --bgc:    #07091a;
+      --bgd:    #0b0e22;
+      --blue:   #0a84ff;
+      --blueb:  #4da6ff;
+      --bluex:  rgba(10,132,255,.12);
+      --blueln: rgba(10,132,255,.2);
+      --silver: #cdd8e8;
+      --white:  #fff;
+      --muted:  #4e5d72;
+      --text:   #d8e4f0;
+      --glow:   0 0 50px rgba(10,132,255,.4);
+      --glowlg: 0 0 100px rgba(10,132,255,.25);
+      --r:  6px;
+      --rl: 14px;
+      --tr: all .28s cubic-bezier(.4,0,.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7}
+    body.locked{overflow:hidden}
+    img{display:block;max-width:100%}
+    a{text-decoration:none;color:inherit}
+
+    /* ════════════════ SPLASH ════════════════ */
+    #splash{
+      position:fixed;inset:0;z-index:9999;
+      background:#000;
+      display:flex;align-items:center;justify-content:center;
+    }
+    #splash::after{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(10,132,255,.015) 2px,rgba(10,132,255,.015) 4px);
+      animation:scanY 10s linear infinite;
+    }
+    @keyframes scanY{to{transform:translateY(80px)}}
+
+    .sp-corner{position:absolute;width:48px;height:48px;border:2px solid rgba(10,132,255,.6);z-index:1}
+    .sp-corner.tl{top:clamp(18px,4vw,44px);left:clamp(18px,4vw,44px);border-right:none;border-bottom:none}
+    .sp-corner.tr{top:clamp(18px,4vw,44px);right:clamp(18px,4vw,44px);border-left:none;border-bottom:none}
+    .sp-corner.bl{bottom:clamp(18px,4vw,44px);left:clamp(18px,4vw,44px);border-right:none;border-top:none}
+    .sp-corner.br{bottom:clamp(18px,4vw,44px);right:clamp(18px,4vw,44px);border-left:none;border-top:none}
+
+    /* blue radial bg glow */
+    .sp-glow{position:absolute;width:800px;height:400px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(10,132,255,.12) 0%,transparent 70%);pointer-events:none;animation:glowPulse 3s ease-in-out infinite alternate}
+    @keyframes glowPulse{from{opacity:.5}to{opacity:1}}
+
+    /* progress bar */
+    .sp-bar{position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--blueb));box-shadow:0 0 10px var(--blue);width:0;z-index:2;animation:spBar 8.5s linear .2s forwards}
+    @keyframes spBar{to{width:100%}}
+
+    /* stages */
+    .sp-stage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;z-index:2;opacity:0;pointer-events:none}
+
+    /* Stage 1 – iTECHNO */
+    #sp1{animation:spIn .9s ease .3s forwards, spOut .7s ease 3.4s forwards}
+    #sp1 .sp-img img{
+      width:min(580px,82vw);
+      filter:drop-shadow(0 0 60px rgba(10,132,255,.8)) drop-shadow(0 0 120px rgba(10,132,255,.35));
+      animation:imgPulse 2s ease-in-out 1.2s 2;
+    }
+    @keyframes imgPulse{0%,100%{filter:drop-shadow(0 0 60px rgba(10,132,255,.8)) drop-shadow(0 0 120px rgba(10,132,255,.35))}50%{filter:drop-shadow(0 0 90px rgba(10,132,255,1)) drop-shadow(0 0 160px rgba(10,132,255,.6))}}
+    /* sp-sub removed per user request */
+
+    /* Stage 2 – TU × FP : glowing floating card on dark splash */
+    #sp2{animation:spIn .9s ease 4.4s forwards, spOut .7s ease 7.6s forwards}
+
+    #sp2 .sp-img{
+      /* dark frosted card — makes logo look like a premium badge */
+      background: linear-gradient(135deg, #0a0f20 0%, #070b18 100%);
+      border: 1px solid rgba(10,132,255,.55);
+      border-radius: 0;
+      padding: clamp(1.25rem,4vw,2rem) clamp(1.75rem,6vw,3.5rem);
+      box-shadow:
+        0 0 0 1px rgba(10,132,255,.15),
+        0 0 60px rgba(10,132,255,.35),
+        0 0 120px rgba(10,132,255,.15),
+        inset 0 1px 0 rgba(255,255,255,.05);
+      position:relative;overflow:hidden;
+      animation:cardReveal 1s cubic-bezier(.22,1,.36,1) 4.7s both;
+    }
+    /* top shimmer line on card */
+    #sp2 .sp-img::before{
+      content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(10,132,255,.8),transparent);
+    }
+    #sp2 .sp-img img{
+      width:min(580px,80vw);display:block;
+      /* invert to remove white bg, then re-invert hue to restore colors */
+      filter:invert(1) hue-rotate(180deg) contrast(1.1) saturate(1.2);
+    }
+    @keyframes cardReveal{
+      from{opacity:0;transform:scale(.88) translateY(20px);box-shadow:0 0 0 1px rgba(10,132,255,0),0 0 0 rgba(10,132,255,0)}
+      to  {opacity:1;transform:scale(1)   translateY(0);   box-shadow:0 0 0 1px rgba(10,132,255,.15),0 0 60px rgba(10,132,255,.35),0 0 120px rgba(10,132,255,.15),inset 0 1px 0 rgba(255,255,255,.05)}
+    }
+    #sp2 .sp-line{width:min(380px,72vw);height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:0;animation:spFU .5s ease 5.8s forwards}
+    #sp2 .sp-label{font-family:'Rajdhani',sans-serif;font-size:clamp(.65rem,1.8vw,.85rem);letter-spacing:.28em;text-transform:uppercase;color:var(--muted);opacity:0;animation:spFU .5s ease 6s forwards}
+
+    /* shared */
+    @keyframes spIn {from{opacity:0}to{opacity:1;pointer-events:auto}}
+    @keyframes spOut{from{opacity:1}to{opacity:0;pointer-events:none}}
+    @keyframes spFU  {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    /* splash exit */
+    #splash.exit{animation:spExit .85s cubic-bezier(.7,0,1,1) forwards}
+    @keyframes spExit{0%{opacity:1;clip-path:inset(0 0 0 0)}100%{opacity:0;clip-path:inset(48% 0 48% 0)}}
+
+    /* ════════════════ LAYOUT ════════════════ */
+    .wrap{width:100%;max-width:1160px;margin-inline:auto;padding-inline:clamp(1.25rem,5vw,2.5rem)}
+    .hline{height:1px;background:linear-gradient(90deg,transparent,var(--blueln),transparent)}
+
+    /* ════════════════ NAV ════════════════ */
+    nav{position:sticky;top:0;z-index:100;background:rgba(4,6,15,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--blueln)}
+    .nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
+    .nav-brand{font-family:'Orbitron',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.14em;color:var(--white);display:flex;align-items:center;gap:.5rem}
+    .nav-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);animation:blink 2s ease-in-out infinite;flex-shrink:0}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    .nav-links{display:flex;align-items:center;gap:1.5rem}
+    .nav-links a{font-family:'Rajdhani',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+    .nav-links a:hover{color:var(--blue)}
+    .nav-badge{font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 12px;border-radius:3px;border:1px solid var(--blueln);color:var(--blueb);background:var(--bluex)}
+    @media(max-width:600px){.nav-links{display:none}}
+
+    /* ════════════════ HERO ════════════════ */
+    .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;padding-block:5rem}
+
+    /* animated grid */
+    .hero-grid{position:absolute;inset:0;pointer-events:none;
+      background-image:linear-gradient(var(--blueln) 1px,transparent 1px),linear-gradient(90deg,var(--blueln) 1px,transparent 1px);
+      background-size:70px 70px;
+      mask-image:radial-gradient(ellipse 90% 90% at 50% 50%,#000 20%,transparent 100%);
+      animation:gridDrift 20s linear infinite;
+    }
+    @keyframes gridDrift{0%{background-position:0 0}100%{background-position:70px 70px}}
+
+    /* center radial */
+    .hero-radial{position:absolute;width:900px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(10,132,255,.08) 0%,transparent 70%);pointer-events:none}
+
+    /* large number watermark */
+    .hero-watermark{
+      position:absolute;right:-40px;top:50%;transform:translateY(-50%);
+      font-family:'Orbitron',sans-serif;font-size:clamp(8rem,20vw,18rem);
+      font-weight:900;color:transparent;
+      -webkit-text-stroke:1px rgba(10,132,255,.07);
+      line-height:1;pointer-events:none;user-select:none;letter-spacing:-.02em;
+    }
+
+    .hero-body{position:relative;z-index:1;width:100%}
+    .hero-kicker{display:flex;align-items:center;gap:.7rem;margin-bottom:1.6rem}
+    .kicker-line{flex-shrink:0;width:32px;height:1px;background:var(--blue)}
+    .kicker-txt{font-family:'Rajdhani',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--blueb)}
+
+    .hero-title{
+      font-family:'Orbitron',sans-serif;
+      font-size:clamp(2rem,7.5vw,7.5rem);
+      font-weight:900;line-height:.92;letter-spacing:.04em;
+      white-space:nowrap;
+      color:var(--white);margin-bottom:1.25rem;
+    }
+    .hero-title em{
+      font-style:normal;color:transparent;
+      -webkit-text-stroke:2px rgba(10,132,255,.6);
+    }
+    @media(max-width:480px){.hero-title{white-space:normal;font-size:clamp(2.4rem,11vw,4rem)}}
+
+    .hero-desc{
+      font-size:clamp(.9rem,1.7vw,1.05rem);
+      color:var(--muted);max-width:480px;
+      margin-bottom:2.75rem;line-height:1.9;
+    }
+    .hero-desc strong{color:var(--silver)}
+
+    .hero-cta{display:flex;gap:.9rem;flex-wrap:wrap;align-items:center}
+
+    .hero-scroll{
+      position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:.4rem;
+      font-family:'Rajdhani',sans-serif;font-size:.65rem;letter-spacing:.2em;
+      text-transform:uppercase;color:var(--muted);animation:scrollBounce 2s ease-in-out infinite;
+    }
+    .hero-scroll-bar{width:1px;height:36px;background:linear-gradient(var(--blue),transparent)}
+    @keyframes scrollBounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+    .hero-vert{
+      position:absolute;right:1.5rem;top:50%;transform:translateY(-50%) rotate(90deg);
+      font-family:'Rajdhani',sans-serif;font-size:.6rem;letter-spacing:.3em;
+      text-transform:uppercase;color:rgba(78,93,114,.5);white-space:nowrap;
+    }
+    @media(max-width:768px){.hero-vert,.hero-watermark{display:none}}
+
+    /* ════════════════ BUTTONS ════════════════ */
+    .btn{
+      display:inline-flex;align-items:center;gap:.5rem;
+      padding:.72rem 1.85rem;border-radius:var(--r);
+      font-family:'Rajdhani',sans-serif;font-size:.86rem;font-weight:700;
+      letter-spacing:.1em;text-transform:uppercase;
+      border:none;cursor:pointer;transition:var(--tr);
+    }
+    .btn-p{background:var(--blue);color:#fff;box-shadow:0 4px 24px rgba(10,132,255,.4)}
+    .btn-p:hover{background:var(--blueb);transform:translateY(-2px);box-shadow:0 6px 36px rgba(10,132,255,.6)}
+    .btn-g{background:transparent;border:1px solid var(--blueln);color:var(--silver)}
+    .btn-g:hover{border-color:var(--blue);color:var(--blueb);background:var(--bluex);transform:translateY(-2px)}
+
+    /* ════════════════ PARTNERS BAND ════════════════ */
+    .partners-band{
+      background:var(--bgc);
+      border-top:1px solid var(--blueln);
+      border-bottom:1px solid var(--blueln);
+      padding-block:clamp(2rem,5vw,3.5rem);
+      position:relative;overflow:hidden;
+    }
+    .partners-band::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 60% 100% at 50% 50%,rgba(10,132,255,.05) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .partners-in{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.25rem;position:relative;z-index:1}
+    .partners-label{font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:.6rem}
+    .partners-label::before,.partners-label::after{content:'';flex:0 0 28px;height:1px;background:var(--blue)}
+
+    /* partner logo — dark theme blend */
+    .partners-logo-wrap{
+      position:relative;display:inline-block;
+      border-radius:12px;overflow:hidden;
+    }
+    .partners-logo-wrap img{
+      width:min(600px,86vw);height:auto;display:block;
+      filter:brightness(.92) contrast(1.1) saturate(1.15);
+    }
+    /* edge gradient overlays — blends white bg into dark page */
+    .partners-logo-wrap::before{
+      content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+      background:
+        linear-gradient(to right,  var(--bg) 0%, transparent 18%, transparent 82%, var(--bg) 100%),
+        linear-gradient(to bottom, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%);
+    }
+    /* subtle inner border glow */
+    .partners-logo-wrap::after{
+      content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+      box-shadow:inset 0 0 40px rgba(4,6,15,.85);
+      border-radius:12px;
+    }
+
+    /* ════════════════ STATS ════════════════ */
+    .stats{background:var(--bgd);border-bottom:1px solid var(--blueln)}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+    .sc{padding:1.75rem 1rem;text-align:center;border-right:1px solid var(--blueln)}
+    .sc:last-child{border-right:none}
+    .sc-n{font-family:'Orbitron',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;color:var(--blueb);line-height:1;text-shadow:0 0 24px rgba(10,132,255,.5)}
+    .sc-l{font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-top:.4rem}
+    @media(max-width:560px){
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+      .sc:nth-child(2){border-right:none}
+      .sc:nth-child(3),.sc:nth-child(4){border-top:1px solid var(--blueln)}
+      .sc:nth-child(4){border-right:none}
+    }
+
+    /* ════════════════ SECTIONS ════════════════ */
+    section{padding-block:clamp(3.5rem,7vw,5.5rem)}
+    .sec-ey{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:.55rem;margin-bottom:.55rem}
+    .sec-ey::before{content:'';width:20px;height:1px;background:var(--blue)}
+    .sec-ttl{font-family:'Orbitron',sans-serif;font-size:clamp(1.35rem,3vw,2rem);font-weight:700;color:var(--white);letter-spacing:.04em;line-height:1.2}
+    .sec-desc{color:var(--muted);margin-top:.6rem;font-size:.9rem;max-width:480px}
+    .sh{margin-bottom:2.5rem}
+
+    /* ════════════════ MAIN DETAILS ════════════════ */
+    .details-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--blueln);border:1px solid var(--blueln);border-radius:var(--rl);overflow:hidden}
+    .dc{background:var(--bgc);padding:2rem 1.75rem;position:relative;transition:background .25s}
+    .dc:hover{background:rgba(10,132,255,.05)}
+    .dc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:0;transition:opacity .3s}
+    .dc:hover::before{opacity:1}
+    .dc-icon{width:36px;height:36px;border-radius:8px;background:var(--bluex);border:1px solid var(--blueln);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1rem}
+    .dc-lbl{font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:.4rem}
+    .dc-val{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:var(--white);letter-spacing:.04em}
+    .dc-sub{font-size:.78rem;color:var(--muted);margin-top:.2rem}
+
+    /* ════════════════ ABOUT ════════════════ */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+    @media(max-width:760px){.about-grid{grid-template-columns:1fr;gap:2.5rem}}
+    .about-txt p{color:var(--muted);line-height:1.9;margin-bottom:1.1rem;font-size:.92rem}
+    .about-txt p strong{color:var(--silver)}
+    .tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.25rem}
+    .tag{font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 11px;border-radius:3px;border:1px solid var(--blueln);color:var(--blueb);background:var(--bluex)}
+
+
+    .about-vis{display:flex;align-items:center;justify-content:center}
+
+    /* ── Premium Tech Card ── */
+    .tech-card{
+      width:clamp(260px,90%,310px);
+      background:var(--bgc);
+      border:1px solid var(--blueln);
+      position:relative;overflow:hidden;
+      padding:1.75rem 1.6rem 1.5rem;
+    }
+    /* animated scan line */
+    .tech-card::before{
+      content:'';position:absolute;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,var(--blue),transparent);
+      opacity:.6;animation:tcScan 3s ease-in-out infinite;
+    }
+    @keyframes tcScan{0%{top:-2px;opacity:0}10%{opacity:.6}90%{opacity:.6}100%{top:100%;opacity:0}}
+
+    /* corner brackets */
+    .tc-corner{position:absolute;width:14px;height:14px;border-color:var(--blue);border-style:solid}
+    .tc-corner.tl{top:8px;left:8px;border-width:2px 0 0 2px}
+    .tc-corner.tr{top:8px;right:8px;border-width:2px 2px 0 0}
+    .tc-corner.bl{bottom:8px;left:8px;border-width:0 0 2px 2px}
+    .tc-corner.br{bottom:8px;right:8px;border-width:0 2px 2px 0}
+
+    /* LIVE pill */
+    .tc-live{
+      display:flex;align-items:center;gap:.4rem;margin-bottom:1.25rem;
+      font-family:'Rajdhani',sans-serif;font-size:.62rem;font-weight:700;
+      letter-spacing:.2em;text-transform:uppercase;color:var(--blue);
+    }
+    .tc-pulse{
+      width:7px;height:7px;border-radius:50%;background:var(--blue);
+      box-shadow:0 0 8px var(--blue);
+      animation:tcPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes tcPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.4}}
+
+    /* large event number */
+    .tc-evt{
+      font-family:'Orbitron',sans-serif;font-size:4.5rem;font-weight:900;
+      line-height:1;color:var(--white);
+      text-shadow:0 0 30px rgba(10,132,255,.5),0 0 60px rgba(10,132,255,.2);
+      margin-bottom:.15rem;
+      display:flex;align-items:baseline;gap:.3rem;
+    }
+    .tc-evt-lbl{font-size:1rem;color:var(--blue);font-weight:600}
+    .tc-title{
+      font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;
+      letter-spacing:.12em;text-transform:uppercase;color:var(--silver);
+      border-bottom:1px solid var(--blueln);padding-bottom:.85rem;margin-bottom:.9rem;
+    }
+
+    /* data bars */
+    .tc-data{display:flex;flex-direction:column;gap:.55rem}
+    .tc-row{display:flex;align-items:center;gap:.6rem;font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+    .tc-key{width:38px;color:var(--muted);flex-shrink:0}
+    .tc-bar{flex:1;height:3px;background:rgba(10,132,255,.12);border-radius:2px;overflow:hidden}
+    .tc-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--blueb));border-radius:2px;animation:barLoad 1.8s cubic-bezier(.4,0,.2,1) both}
+    @keyframes barLoad{from{width:0}to{width:var(--w,60%)}}
+    .tc-val{width:24px;text-align:right;color:var(--blueb);flex-shrink:0}
+
+    /* ════════════════ FOCUS AREAS ════════════════ */
+    .focus-grid{
+      display:grid;
+      grid-template-columns:repeat(12,1fr); /* 12-col base */
+      border:1px solid var(--blueln);border-radius:var(--rl);
+      overflow:hidden;gap:1px;background:var(--blueln);
+    }
+    /* Row 1: items 1–3, each takes 4/12 = 33.3% */
+    .fc:nth-child(1),.fc:nth-child(2),.fc:nth-child(3){ grid-column:span 4 }
+    /* Row 2: items 4–6, each takes 4/12 = 33.3% — fills row */
+    .fc:nth-child(4),.fc:nth-child(5),.fc:nth-child(6){ grid-column:span 4 }
+
+    .fc{background:var(--bgc);padding:1.75rem 1.6rem;transition:background .25s;cursor:default}
+    .fc:hover{background:rgba(10,132,255,.06)}
+    .fc:hover .fc-n{color:var(--blueb);text-shadow:var(--glow)}
+    .fc-n{font-family:'Orbitron',sans-serif;font-size:1.7rem;font-weight:700;color:rgba(10,132,255,.16);line-height:1;margin-bottom:.6rem;transition:var(--tr)}
+    .fc-t{font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--silver);margin-bottom:.2rem}
+    .fc-t.react{color:#61DAFB}
+    .fc-d{font-size:.76rem;color:var(--muted)}
+    /* responsive: collapse to 2-col on small screens */
+    @media(max-width:640px){
+      .focus-grid{grid-template-columns:repeat(2,1fr)}
+      .fc:nth-child(n){grid-column:span 1}
+    }
+
+    /* ════════════════ COORDINATORS ════════════════ */
+    .coord-section-title{font-family:'Rajdhani',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem}
+    .coord-section-title::after{content:'';flex:1;height:1px;background:var(--blueln)}
+
+    /* Faculty card — larger, distinct */
+    .faculty-grid{margin-bottom:2rem}
+    .faculty-card{
+      background:var(--bgc);border:1px solid var(--blueln);border-radius:var(--rl);
+      padding:2.25rem 2rem;
+      display:flex;align-items:center;gap:1.75rem;
+      position:relative;overflow:hidden;
+      transition:var(--tr);
+      max-width:500px;
+    }
+    .faculty-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--blue),var(--blueb))}
+    .faculty-card:hover{border-color:var(--blue);box-shadow:var(--glow);transform:translateY(-3px)}
+    .fac-av{
+      width:80px;height:80px;border-radius:50%;flex-shrink:0;
+      border:2px solid var(--blue);background:var(--bgd);
+      overflow:hidden;
+    }
+    .fac-av img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+    .fac-name{font-family:'Rajdhani',sans-serif;font-size:1.25rem;font-weight:700;letter-spacing:.06em;color:var(--white);margin-bottom:.2rem}
+    .fac-role{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+    .fac-tag{display:inline-flex;margin-top:.5rem;font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:3px;border:1px solid rgba(10,132,255,.25);color:var(--blueb);background:var(--bluex)}
+
+    /* Student coordinators */
+    .coord-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.1rem}
+    .coord-card{
+      background:var(--bgc);border:1px solid var(--blueln);border-radius:var(--rl);
+      padding:1.75rem 1.4rem;text-align:center;
+      transition:var(--tr);position:relative;overflow:hidden;
+    }
+    .coord-card:hover{border-color:rgba(10,132,255,.45);box-shadow:0 0 30px rgba(10,132,255,.18);transform:translateY(-4px)}
+    .coord-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:0;transition:opacity .3s}
+    .coord-card:hover::after{opacity:1}
+    .co-av{
+      width:90px;height:90px;border-radius:50%;
+      margin-inline:auto;margin-bottom:1rem;
+      border:2px solid var(--blue);
+      background:var(--bgd);overflow:hidden;
+      box-shadow:0 0 18px rgba(10,132,255,.25);
+    }
+    .co-av img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+    .co-name{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.05em;color:var(--white);margin-bottom:.18rem}
+    .co-role{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+
+    /* ════════════════ SUBMISSION ════════════════ */
+    .sub-panel{background:var(--bgc);border:1px solid rgba(10,132,255,.28);border-radius:var(--rl);padding:clamp(2rem,5vw,3.5rem);position:relative;overflow:hidden}
+    .sub-panel::before{content:'';position:absolute;top:-50%;right:-15%;width:500px;height:500px;background:radial-gradient(circle,rgba(10,132,255,.06) 0%,transparent 70%);pointer-events:none}
+    .sub-in{display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center}
+    @media(max-width:740px){.sub-in{grid-template-columns:1fr;gap:2rem}.sub-act{text-align:center}}
+    .sub-badge{font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#25D366;display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem}
+    .sub-badge::before{content:'●';font-size:.42rem;animation:blink 1.5s ease-in-out infinite}
+    .sub-ttl{font-family:'Orbitron',sans-serif;font-size:clamp(1.05rem,2.2vw,1.55rem);font-weight:700;color:var(--white);margin-bottom:.65rem}
+    .sub-desc{color:var(--muted);font-size:.87rem;line-height:1.85}
+    .steps{margin-top:1.3rem;display:flex;flex-direction:column;gap:.5rem}
+    .step{display:flex;align-items:flex-start;gap:.6rem;font-size:.84rem;color:var(--muted)}
+    .sn{width:20px;height:20px;border-radius:50%;border:1px solid var(--blueln);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:.52rem;color:var(--blue);flex-shrink:0;margin-top:3px}
+    .sub-act{flex-shrink:0}
+    .sub-num{font-family:'Orbitron',sans-serif;font-size:.92rem;color:var(--blueb);text-align:center;margin-bottom:1.1rem;letter-spacing:.06em}
+    .btn-wa{display:inline-flex;align-items:center;gap:.55rem;background:#25D366;color:#fff;padding:.78rem 1.7rem;border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 4px 18px rgba(37,211,102,.3);transition:var(--tr);white-space:nowrap}
+    .btn-wa:hover{box-shadow:0 6px 28px rgba(37,211,102,.5);transform:translateY(-2px)}
+    .btn-wa svg{width:17px;height:17px}
+
+    /* ════════════════ WAB FAB ════════════════ */
+    .wa-fab{position:fixed;bottom:24px;right:24px;z-index:800;width:48px;height:48px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:var(--tr)}
+    .wa-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,.6)}
+    .wa-fab svg{width:23px;height:23px}
+    .wa-tip{position:absolute;right:56px;top:50%;transform:translateY(-50%);background:#0b0e22;border:1px solid var(--blueln);color:var(--silver);font-family:'Rajdhani',sans-serif;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:4px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
+    .wa-fab:hover .wa-tip{opacity:1}
+
+    /* ════════════════ FOOTER ════════════════ */
+    footer{border-top:1px solid var(--blueln);background:var(--bgc);padding-block:1.6rem}
+    .foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+    .foot-b{font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:800;color:var(--blueb);letter-spacing:.12em}
+    .foot-c{font-family:'Rajdhani',sans-serif;font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+    /* ════════════════ REVEAL ════════════════ */
+    .rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+    .rv.in{opacity:1;transform:translateY(0)}
+    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+    /* ══════════════════════════════════════════
+       FULL RESPONSIVE SYSTEM
+    ══════════════════════════════════════════ */
+
+    /* ── Tablet: ≤ 900px ── */
+    @media(max-width:900px){
+      /* Hero */
+      .hero{padding-block:4rem 6rem;min-height:95svh}
+      .hero-body{padding-right:0}
+
+      /* Details – 2 per row on tablet */
+      .details-grid{grid-template-columns:repeat(2,1fr)}
+
+      /* Coordinators – 2 per row */
+      .coord-grid{grid-template-columns:repeat(2,1fr)}
+
+      /* Focus – 4+3 still good but tighten */
+      .fc{padding:1.5rem 1.25rem}
+    }
+
+    /* ── Phablet: ≤ 768px ── */
+    @media(max-width:768px){
+      /* Nav */
+      .nav-links{display:none}
+      .nav-badge{font-size:.6rem;padding:3px 9px;letter-spacing:.08em}
+
+      /* Hero */
+      .hero{padding-block:3.5rem 5.5rem}
+      .hero-kicker{margin-bottom:1.1rem}
+      .kicker-txt{font-size:.68rem;letter-spacing:.18em}
+      .hero-title{font-size:clamp(2.6rem,12vw,5.5rem);white-space:normal;letter-spacing:.02em}
+      .hero-desc{font-size:.9rem;margin-bottom:2rem;max-width:100%}
+      .hero-cta{flex-direction:column;align-items:flex-start;gap:.75rem}
+      .btn{width:100%;justify-content:center;padding:.8rem 1.5rem}
+      .hero-scroll{display:none}
+      .hero-vert,.hero-watermark{display:none}
+
+      /* About spin box — hide on mobile, layout stays clean */
+      .about-vis{display:none}
+
+      /* Focus grid: 2+2+2+1 */
+      .focus-grid{grid-template-columns:repeat(4,1fr)}
+      .fc:nth-child(1),.fc:nth-child(2){ grid-column:span 2 }
+      .fc:nth-child(3),.fc:nth-child(4){ grid-column:span 2 }
+      .fc:nth-child(5),.fc:nth-child(6){ grid-column:span 2 }
+      .fc:nth-child(7){ grid-column:span 4 }
+
+      /* Faculty card */
+      .faculty-card{max-width:100%;padding:1.5rem 1.25rem;gap:1.25rem}
+      .fac-av{width:56px;height:56px;font-size:.95rem}
+
+      /* Submission */
+      .sub-in{grid-template-columns:1fr;gap:1.75rem}
+      .sub-act{text-align:center;display:flex;flex-direction:column;align-items:center}
+      .btn-wa{width:100%;justify-content:center}
+      .sub-num{font-size:.82rem}
+
+      /* Footer */
+      .foot{flex-direction:column;align-items:flex-start;gap:.5rem}
+    }
+
+    /* ── Mobile: ≤ 560px ── */
+    @media(max-width:560px){
+      /* Hero */
+      .hero{padding-block:3rem 5rem}
+      .hero-title{font-size:clamp(2.2rem,13vw,3.5rem)}
+
+      /* Details – 1 per row on phone */
+      .details-grid{grid-template-columns:1fr}
+      .dc{padding:1.5rem 1.25rem}
+      .dc-icon{width:30px;height:30px;font-size:.85rem}
+
+      /* Focus: full single column */
+      .focus-grid{grid-template-columns:1fr}
+      .fc:nth-child(n){grid-column:span 1}
+      .fc{padding:1.25rem 1.1rem}
+      .fc-n{font-size:1.4rem}
+
+      /* Coordinators: 1 per row */
+      .coord-grid{grid-template-columns:1fr}
+
+      /* Faculty card: stack avatar + text vertically */
+      .faculty-card{flex-direction:column;text-align:center;align-items:center;gap:1rem;padding:1.5rem 1rem}
+      .faculty-card::before{top:0;left:0;right:0;bottom:auto;width:auto;height:3px}
+      .fac-name{font-size:1.1rem}
+
+      /* Splash cards compact */
+      #sp2 .sp-img{padding:1rem 1.25rem}
+      #sp2 .sp-img img{width:min(320px,80vw)}
+
+      /* Section headers */
+      .sec-ttl{font-size:clamp(1.2rem,6vw,1.6rem)}
+      .sh{margin-bottom:1.75rem}
+
+      /* About */
+      .about-grid{gap:1.75rem}
+      .about-txt p{font-size:.88rem}
+
+      /* Submission */
+      .sub-panel{padding:1.5rem 1.25rem}
+      .sub-ttl{font-size:1.1rem}
+      .steps{gap:.4rem}
+      .step{font-size:.8rem}
+
+      /* WhatsApp FAB position */
+      .wa-fab{bottom:16px;right:16px;width:44px;height:44px}
+
+      /* Nav */
+      .nav-brand{font-size:.88rem}
+      .nav-badge{display:none}
+    }
+
+    /* ── Small phones: ≤ 380px ── */
+    @media(max-width:380px){
+      .hero-title{font-size:clamp(2rem,14vw,3rem)}
+      .wrap{padding-inline:1rem}
+      .sp-corner{width:32px;height:32px}
+      .hero-cta .btn{padding:.72rem 1rem;font-size:.78rem}
+      #sp1 .sp-img img{width:80vw}
+    }
+  </style>
+</head>
+<body class="locked">
+
+<!-- ══════════ SPLASH ══════════ -->
+<div id="splash">
+  <div class="sp-corner tl"></div><div class="sp-corner tr"></div>
+  <div class="sp-corner bl"></div><div class="sp-corner br"></div>
+  <div class="sp-glow"></div>
+  <div class="sp-bar"></div>
+
+  <!-- Stage 1: iTECHNO -->
+  <div class="sp-stage" id="sp1">
+    <div class="sp-img"><img src="itechno-logo.png" alt="iTECHNO" /></div>
+  </div>
+
+  <!-- Stage 2: Takshashila × FACEPrep (new high-res logo) -->
+  <div class="sp-stage" id="sp2">
+    <div class="sp-img"><img src="splash-logo2.png" alt="Takshashila University × FACEPrep Campus" /></div>
+    <div class="sp-line"></div>
+    <p class="sp-label">Presents &nbsp;·&nbsp; HackVerse 2026</p>
+  </div>
+</div>
+
+
+<!-- ══════════ NAV ══════════ -->
+<nav>
+  <div class="wrap nav-in">
+    <a href="#" class="nav-brand"><span class="nav-dot"></span>HACKVERSE</a>
+    <div class="nav-links">
+      <a href="#details">Details</a>
+      <a href="#focus">Focus</a>
+      <a href="#team">Team</a>
+      <a href="#submit">Submit</a>
+    </div>
+    <span class="nav-badge">Event #01</span>
+  </div>
+</nav>
+
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-radial"></div>
+  <div class="hero-watermark">01</div>
+
+  <div class="wrap hero-body">
+    <div class="hero-kicker rv"><span class="kicker-line"></span><span class="kicker-txt">Web Development Challenge &nbsp;·&nbsp; Event 01</span></div>
+    <h1 class="hero-title rv d1">HACK<em>VERSE</em></h1>
+    <p class="hero-desc rv d2">An elite timed challenge. Build a <strong>functional, production-quality</strong> website from scratch using HTML, CSS &amp; JavaScript. Under pressure. Against the clock.</p>
+    <div class="hero-cta rv d3">
+      <a href="#details" class="btn btn-p">View Details</a>
+      <a href="#submit" class="btn btn-g">Submit Project</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll"><div class="hero-scroll-bar"></div><span>Scroll</span></div>
+  <p class="hero-vert">HACKVERSE &nbsp;·&nbsp; INNOVATE &nbsp;·&nbsp; BUILD &nbsp;·&nbsp; TRANSFORM</p>
+</section>
+
+
+
+
+
+
+
+<!-- ══════════ MAIN DETAILS ══════════ -->
+<section id="details">
+  <div class="wrap">
+    <div class="sh rv">
+      <p class="sec-ey">Event Specification</p>
+      <h2 class="sec-ttl">Main Details</h2>
+      <p class="sec-desc">Everything you need to know before competing.</p>
+    </div>
+    <div class="details-grid rv">
+      <div class="dc">
+        <div class="dc-icon">🏆</div>
+        <div class="dc-lbl">Event Name</div>
+        <div class="dc-val">HackVerse</div>
+        <div class="dc-sub">Web Development Challenge</div>
+      </div>
+      <div class="dc">
+        <div class="dc-icon">👥</div>
+        <div class="dc-lbl">Team Composition</div>
+        <div class="dc-val">2 – 3 Members</div>
+        <div class="dc-sub">Per competing team</div>
+      </div>
+      <div class="dc">
+        <div class="dc-icon">⏱</div>
+        <div class="dc-lbl">Time Limit</div>
+        <div class="dc-val">2 – 3 Hours</div>
+        <div class="dc-sub">Strict cutoff enforced</div>
+      </div>
+      <div class="dc">
+        <div class="dc-icon">🎯</div>
+        <div class="dc-lbl">Challenge Type</div>
+        <div class="dc-val">Live Build</div>
+        <div class="dc-sub">Build from scratch on-site</div>
+      </div>
+      <div class="dc">
+        <div class="dc-icon">⚖️</div>
+        <div class="dc-lbl">Judging</div>
+        <div class="dc-val">7 Criteria</div>
+        <div class="dc-sub">Design, code, UX &amp; more</div>
+      </div>
+      <div class="dc">
+        <div class="dc-icon">📦</div>
+        <div class="dc-lbl">Submission</div>
+        <div class="dc-val">ZIP via WhatsApp</div>
+        <div class="dc-sub">Compulsory for all teams</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hline"></div>
+
+<!-- ══════════ ABOUT ══════════ -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-txt rv">
+        <div class="sh">
+          <p class="sec-ey">Overview</p>
+          <h2 class="sec-ttl">What is HackVerse?</h2>
+        </div>
+        <p>HackVerse is an intensive build challenge where teams create a <strong>fully functional website</strong> using HTML, CSS and JavaScript — within a fixed time window.</p>
+        <p>Participants are evaluated on technical execution, visual quality, and problem-solving under pressure. Only teams that meet the submission deadline will be judged.</p>
+        <div class="tags">
+          <span class="tag">Live Event</span>
+          <span class="tag">Timed Build</span>
+          <span class="tag">Panel Judging</span>
+          <span class="tag">Compulsory Submission</span>
+        </div>
+      </div>
+      <div class="about-vis rv d2">
+        <div class="tech-card">
+          <!-- corner brackets -->
+          <div class="tc-corner tl"></div>
+          <div class="tc-corner tr"></div>
+          <div class="tc-corner bl"></div>
+          <div class="tc-corner br"></div>
+          <!-- live indicator -->
+          <div class="tc-live"><span class="tc-pulse"></span>Active Event</div>
+          <!-- event number -->
+          <div class="tc-evt">01<span class="tc-evt-lbl">EVENT</span></div>
+          <div class="tc-title">HACKVERSE — WEB DEV CHALLENGE</div>
+          <!-- data bars -->
+          <div class="tc-data">
+            <div class="tc-row">
+              <span class="tc-key">TEAM</span>
+              <div class="tc-bar"><div class="tc-fill" style="--w:60%"></div></div>
+              <span class="tc-val">2-3</span>
+            </div>
+            <div class="tc-row">
+              <span class="tc-key">TIME</span>
+              <div class="tc-bar"><div class="tc-fill" style="--w:85%"></div></div>
+              <span class="tc-val">3H</span>
+            </div>
+            <div class="tc-row">
+              <span class="tc-key">CRIT</span>
+              <div class="tc-bar"><div class="tc-fill" style="--w:100%"></div></div>
+              <span class="tc-val">07</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hline"></div>
+
+<!-- ══════════ FOCUS AREAS ══════════ -->
+<section id="focus">
+  <div class="wrap">
+    <div class="sh rv">
+      <p class="sec-ey">Judging Criteria</p>
+      <h2 class="sec-ttl">Focus Areas</h2>
+      <p class="sec-desc">Six dimensions. Every point is contested.</p>
+    </div>
+    <div class="focus-grid rv">
+      <div class="fc"><div class="fc-n">01</div><div class="fc-t">HTML</div><div class="fc-d">Structure &amp; Semantics</div></div>
+      <div class="fc"><div class="fc-n">02</div><div class="fc-t">CSS</div><div class="fc-d">Styling &amp; Layout</div></div>
+      <div class="fc"><div class="fc-n">03</div><div class="fc-t">Creativity</div><div class="fc-d">Concept &amp; Originality</div></div>
+      <div class="fc"><div class="fc-n">04</div><div class="fc-t">UI / UX</div><div class="fc-d">Design &amp; Usability</div></div>
+      <div class="fc"><div class="fc-n">05</div><div class="fc-t">Responsive</div><div class="fc-d">Cross-device Compatibility</div></div>
+      <div class="fc"><div class="fc-n">06</div><div class="fc-t">Presentation</div><div class="fc-d">Delivery &amp; Overall Impact</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="hline"></div>
+
+<!-- ══════════ COORDINATORS ══════════ -->
+<section id="team">
+  <div class="wrap">
+    <div class="sh rv">
+      <p class="sec-ey">Operations Team</p>
+      <h2 class="sec-ttl">Coordinators</h2>
+    </div>
+
+    <!-- Faculty -->
+    <div class="coord-section-title rv">Faculty Coordinator</div>
+    <div class="faculty-grid rv">
+      <div class="faculty-card">
+        <div class="fac-av">
+          <img src="coord-priyanshi.png" alt="Priyanshi" />
+        </div>
+        <div>
+          <div class="fac-name">Priyanshi</div>
+          <div class="fac-role">Faculty Coordinator — HackVerse</div>
+          <span class="fac-tag">Faculty · In-Charge</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student -->
+    <div class="coord-section-title rv" style="margin-top:2.5rem">Student Coordinators</div>
+    <div class="coord-grid">
+      <div class="coord-card rv">
+        <div class="co-av"><img src="coord-farzana.png" alt="Farzana Kaleesha" /></div>
+        <div class="co-name">Farzana Kaleesha</div>
+        <div class="co-role">Event Coordinator</div>
+      </div>
+      <div class="coord-card rv d1">
+        <div class="co-av"><img src="coord-rajesh.png" alt="Rajesh. S" /></div>
+        <div class="co-name">Rajesh. S</div>
+        <div class="co-role">Event Coordinator</div>
+      </div>
+      <div class="coord-card rv d2">
+        <div class="co-av"><img src="coord-praveen.png" alt="Praveenkumar" /></div>
+        <div class="co-name">Praveenkumar</div>
+        <div class="co-role">Event Coordinator</div>
+      </div>
+      <div class="coord-card rv d3">
+        <div class="co-av"><img src="coord-keerthi.png" alt="Keerthi Vasan" /></div>
+        <div class="co-name">Keerthi Vasan</div>
+        <div class="co-role">Event Coordinator</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hline"></div>
+
+<!-- ══════════ SUBMISSION ══════════ -->
+<section id="submit">
+  <div class="wrap">
+    <div class="sh rv">
+      <p class="sec-ey">Submission Protocol</p>
+      <h2 class="sec-ttl">Submit Your Project</h2>
+    </div>
+    <div class="sub-panel rv">
+      <div class="sub-in">
+        <div>
+          <p class="sub-badge">Compulsory for all teams</p>
+          <h3 class="sub-ttl">Send ZIP via WhatsApp</h3>
+          <p class="sub-desc">Every participant must send their finished project as a <strong style="color:#25D366">.zip file</strong> to the coordinator's WhatsApp number immediately upon completion. Teams that fail to submit before the cutoff will not be evaluated.</p>
+          <div class="steps">
+            <div class="step"><span class="sn">1</span><span>Zip your entire project folder — include all files</span></div>
+            <div class="step"><span class="sn">2</span><span>Rename: <strong style="color:var(--silver)">TeamName_HackVerse.zip</strong></span></div>
+            <div class="step"><span class="sn">3</span><span>Send via WhatsApp to the number before time ends</span></div>
+          </div>
+        </div>
+        <div class="sub-act">
+          <div class="sub-num">+91 98406 94616</div>
+          <a href="https://wa.me/919840694616?text=Hi%21+Submitting+my+HackVerse+project+zip." target="_blank" rel="noopener" class="btn-wa">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            Send on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="wrap foot">
+    <span class="foot-b">HACKVERSE</span>
+    <span class="foot-c">Event #01 · Takshashila University × FACEPrep Campus · 2025</span>
+  </div>
+</footer>
+
+
+<!-- ══════════ FLOATING WA ══════════ -->
+<a href="https://wa.me/919840694616" target="_blank" rel="noopener" class="wa-fab" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+  <span class="wa-tip">WhatsApp</span>
+</a>
+
+
+<script>
+/* partners band logo — no processing needed, CSS handles blending */
+
+/* ══════════ SPLASH CONTROLLER ══════════ */
+const splash = document.getElementById('splash');
+let splashDismissed = false;
+
+function dismissSplash() {
+  if (splashDismissed) return;
+  splashDismissed = true;
+  splash.classList.add('exit');
+  document.body.classList.remove('locked');
+  splash.addEventListener('animationend', () => splash.remove(), { once: true });
+}
+
+// Stage timing: s1 in@.3s out@3.4s | s2 in@4.4s out@7.6s → exit at ~8.4s
+setTimeout(dismissSplash, 8500);
+splash.addEventListener('click', dismissSplash, { once: true });
+
+/* ══════════ SCROLL REVEAL ══════════ */
+const ro = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+  { threshold: 0.07 }
+);
+document.querySelectorAll('.rv').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>
